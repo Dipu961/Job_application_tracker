@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Job Tracker</title>
+  <style>
+    body {
+      background: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .login-container {
+      background: #fff;
+      max-width: 370px;
+      margin: 80px auto;
+      padding: 2.5rem 2rem 2rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(60, 72, 88, 0.13);
+      text-align: center;
+    }
+    .login-container h1 {
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #4a5568;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #3498db;
+      outline: none;
+      background: #fff;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.8rem;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    button[type="submit"]:hover {
+      background: #2980b9;
+    }
+    .login-footer {
+      margin-top: 1.2rem;
+      color: #6b7280;
+      font-size: 0.97rem;
+    }
+    .login-footer a {
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+    #message {
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+    @media (max-width: 480px) {
+      .login-container {
+        margin: 30px 10px;
+        padding: 1.5rem 1rem 1rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login</h1>
+    <div id="message"></div>
+    <form action="/login" method="POST" autocomplete="off">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="username" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <div class="login-footer">
+      Don't have an account? <a href="/register">Register here</a>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function () {
+        const email = document.getElementById('email').value;
+        localStorage.setItem('jobtracker_username', email);
+      });
+
+      // Show error/success message from query string
+      const params = new URLSearchParams(window.location.search);
+      const error = params.get('error');
+      const success = params.get('success');
+      const messageDiv = document.getElementById('message');
+      if (error) {
+        messageDiv.textContent = error;
+        messageDiv.style.color = '#e74c3c';
+      } else if (success) {
+        messageDiv.textContent = success;
+        messageDiv.style.color = '#27ae60';
+      }
+    });
+  </script>
+</body>
+</html>

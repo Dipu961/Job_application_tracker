@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - Job Tracker</title>
+  <style>
+    body {
+      background: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .register-container {
+      background: #fff;
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(60, 72, 88, 0.13);
+      text-align: center;
+    }
+    .register-container h1 {
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .form-group {
+      margin-bottom: 1.1rem;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #4a5568;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"] {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f8fafc;
+    }
+    input:focus {
+      border-color: #3498db;
+      outline: none;
+      background: #fff;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.8rem;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    button[type="submit"]:hover {
+      background: #2980b9;
+    }
+    .register-footer {
+      margin-top: 1.2rem;
+      color: #6b7280;
+      font-size: 0.97rem;
+    }
+    .register-footer a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    .register-footer a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+      .register-container {
+        margin: 30px 10px;
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h1>Create Account</h1>
+    <form action="/register" method="POST">
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="firstName" required />
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" name="lastName" required />
+      </div>
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" name="confirmPassword" required />
+      </div>
+      <button type="submit">Register</button>
+    </form>
+    <div class="register-footer">
+      Already have an account? <a href="/">Login here</a>
+    </div>
+  </div>
+</body>
+</html>

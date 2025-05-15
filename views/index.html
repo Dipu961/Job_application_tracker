@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Application Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body {
+      background: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .logout-btn {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      z-index: 20;
+    }
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+    .dashboard-bar {
+      width: 100%;
+      background: #3498db;
+      box-shadow: 0 2px 8px rgba(60, 72, 88, 0.08);
+      padding: 1.2rem 2rem 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      gap: 2.5rem;
+    }
+    .dashboard-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-right: 2.5rem;
+      letter-spacing: 1px;
+      min-width: 160px;
+    }
+    .dashboard-stats {
+      display: flex;
+      gap: 2.2rem;
+    }
+    .dashboard-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.7rem 1.2rem;
+      text-align: center;
+      min-width: 90px;
+      box-shadow: 0 1px 4px rgba(52, 152, 219, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dashboard-label {
+      font-size: 1rem;
+      color: #6b7280;
+      margin-bottom: 0.2rem;
+    }
+    .dashboard-value {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 0.1rem;
+    }
+    .applied { color: #2563eb; }
+    .interviewed { color: #b7950b; }
+    .offered { color: #27ae60; }
+    .rejected { color: #e74c3c; }
+
+    .main-content {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 40px auto 0 auto;
+      gap: 2.5rem;
+      min-height: 70vh;
+    }
+    .form-section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(60, 72, 88, 0.13);
+      padding: 2rem 2rem 2rem 2rem;
+      min-width: 340px;
+      max-width: 380px;
+      flex: 1 1 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      height: 520px;
+      box-sizing: border-box;
+    }
+    .form-section h1 {
+      color: #2c3e50;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      align-self: flex-start;
+    }
+    form {
+      width: 100%;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #4a5568;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f8fafc;
+      margin-bottom: 1rem;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus, select:focus {
+      border-color: #3498db;
+      outline: none;
+      background: #fff;
+    }
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.8rem;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.5rem;
+    }
+    button[type="submit"]:hover {
+      background: #2980b9;
+    }
+    .listing-section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(60, 72, 88, 0.13);
+      padding: 2rem 2rem 2rem 2rem;
+      min-width: 340px;
+      max-width: 380px;
+      flex: 1 1 340px;
+      height: 520px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .listing-section h2 {
+      color: #2c3e50;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      margin-top: 0;
+      text-align: left;
+    }
+    #jobList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      text-align: left;
+      overflow-y: auto;
+      flex: 1 1 auto;
+      max-height: 400px;
+      min-height: 0;
+    }
+    .job-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    .job-item:hover {
+      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.08);
+    }
+    .job-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .job-company {
+      font-weight: 600;
+      color: #2563eb;
+    }
+    .job-position {
+      color: #2c3e50;
+    }
+    .job-status {
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      background: #eaf6ff;
+      color: #2563eb;
+      margin-left: 8px;
+      display: inline-block;
+    }
+    .edit-btn, .delete-btn {
+      position: relative;
+    }
+    .edit-btn::after, .delete-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: 125%;
+      transform: translateX(-50%);
+      background: #2563eb;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 10;
+    }
+    .edit-btn:hover::after, .delete-btn:hover::after {
+      opacity: 1;
+    }
+    .delete-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-left: 10px;
+    }
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+    .edit-btn {
+      background: #f1c40f;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .edit-btn:hover {
+      background: #b7950b;
+    }
+    @media (max-width: 900px) {
+      .main-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        margin: 24px 8px 0 8px;
+        justify-content: flex-start;
+      }
+      .form-section, .listing-section {
+        max-width: 100%;
+        min-width: 0;
+        width: 100%;
+        height: auto;
+      }
+      .dashboard-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.2rem 1rem 1.2rem 1rem;
+      }
+      .logout-btn {
+        right: 10px;
+        top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="/logout" class="logout-btn">Logout</a>
+  <div class="dashboard-bar">
+    <span class="dashboard-title">Dashboard</span>
+    <div class="dashboard-stats">
+      <div class="dashboard-card">
+        <div class="dashboard-label">Applied</div>
+        <div class="dashboard-value applied" id="appliedCount">0</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="dashboard-label">Interviewed</div>
+        <div class="dashboard-value interviewed" id="interviewedCount">0</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="dashboard-label">Offered</div>
+        <div class="dashboard-value offered" id="offeredCount">0</div>
+      </div>
+      <div class="dashboard-card">
+        <div class="dashboard-label">Rejected</div>
+        <div class="dashboard-value rejected" id="rejectedCount">0</div>
+      </div>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="form-section">
+      <h1>Job Application</h1>
+      <form id="jobForm" autocomplete="off">
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" placeholder="Company" required />
+        </div>
+        <div class="form-group">
+          <label for="position">Position</label>
+          <input type="text" id="position" placeholder="Position" required />
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="Applied">Applied</option>
+            <option value="Interviewed">Interviewed</option>
+            <option value="Offered">Offered</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+        <button type="submit">Add Job</button>
+      </form>
+    </div>
+    <div class="listing-section">
+      <h2>All Applications</h2>
+      <ul id="jobList"></ul>
+    </div>
+  </div>
+  <script>
+    // Fetch and update dashboard stats
+    function updateDashboard() {
+      fetch('/api/jobs')
+        .then(res => res.json())
+        .then(jobs => {
+          let applied = 0, interviewed = 0, offered = 0, rejected = 0;
+          jobs.forEach(job => {
+            if (job.status === "Applied") applied++;
+            else if (job.status === "Interviewed") interviewed++;
+            else if (job.status === "Offered") offered++;
+            else if (job.status === "Rejected") rejected++;
+          });
+          document.getElementById('appliedCount').textContent = applied;
+          document.getElementById('interviewedCount').textContent = interviewed;
+          document.getElementById('offeredCount').textContent = offered;
+          document.getElementById('rejectedCount').textContent = rejected;
+        });
+    }
+
+    let editingJobId = null;
+
+    function fetchJobs() {
+      fetch('/api/jobs')
+        .then(res => res.json())
+        .then(jobs => {
+          const jobList = document.getElementById('jobList');
+          jobList.innerHTML = '';
+          jobs.forEach(job => {
+            const li = document.createElement('li');
+            li.className = 'job-item';
+            li.innerHTML = `
+              <div class="job-info">
+                <span class="job-company">${job.company}</span>
+                <span class="job-position">${job.position}</span>
+                <span class="job-status">${job.status}</span>
+              </div>
+              <div>
+                <button class="edit-btn" 
+                  data-id="${job.id}" 
+                  data-company="${encodeURIComponent(job.company)}" 
+                  data-position="${encodeURIComponent(job.position)}" 
+                  data-status="${encodeURIComponent(job.status)}" 
+                  data-tooltip="Edit">✏️</button>
+                <button class="delete-btn" data-id="${job.id}" data-tooltip="Delete">🗑️</button>
+              </div>
+            `;
+            jobList.appendChild(li);
+          });
+        });
+      updateDashboard();
+    }
+
+    document.getElementById('jobForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const company = document.getElementById('company').value.trim();
+      const position = document.getElementById('position').value.trim();
+      const status = document.getElementById('status').value;
+
+      if (editingJobId) {
+        // Edit mode
+        fetch(`/api/jobs/${editingJobId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ company, position, status })
+        })
+        .then(res => res.json())
+        .then(() => {
+          fetchJobs();
+          this.reset();
+          editingJobId = null;
+          document.querySelector('button[type="submit"]').textContent = "Add Job";
+        });
+      } else {
+        // Add mode
+        fetch('/api/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ company, position, status })
+        })
+        .then(res => res.json())
+        .then(() => {
+          fetchJobs();
+          this.reset();
+        });
+      }
+    });
+
+    document.getElementById('jobList').addEventListener('click', function(e) {
+      if (e.target.classList.contains('delete-btn')) {
+        const id = e.target.getAttribute('data-id');
+        fetch(`/api/jobs/${id}`, { method: 'DELETE' })
+          .then(res => res.json())
+          .then(() => fetchJobs());
+      }
+      if (e.target.classList.contains('edit-btn')) {
+        // Fill form with job data
+        editingJobId = e.target.getAttribute('data-id');
+        document.getElementById('company').value = decodeURIComponent(e.target.getAttribute('data-company'));
+        document.getElementById('position').value = decodeURIComponent(e.target.getAttribute('data-position'));
+        document.getElementById('status').value = decodeURIComponent(e.target.getAttribute('data-status'));
+        document.querySelector('button[type="submit"]').textContent = "Update Job";
+      }
+    });
+
+    // Initial load
+    fetchJobs();
+  </script>
+</body>
+</html>
